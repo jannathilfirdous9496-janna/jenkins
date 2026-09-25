@@ -1,16 +1,6 @@
-python
-from flask import Flask
+from app import app
 
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return "Test Flask Application is Working!"
-
-@app.route("/test")
-def test():
-    return "Test successful!"
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+def test_home():
+response = app.test_client().get("/")
+assert response.status_code == 200
 
