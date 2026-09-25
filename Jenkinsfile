@@ -31,9 +31,12 @@ stages {
         steps {
             bat '''
                 call venv\\Scripts\\activate
-                python app.py
+                start /B python app.py
+                timeout /t 5 /nobreak
+                curl --fail http://127.0.0.1:5000/
             '''
         }
     }
 }
+
 
