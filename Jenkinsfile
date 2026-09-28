@@ -1,34 +1,42 @@
 pipeline {
-agent any
+    agent any
 
-stages {
-    stage('Checkout') {
-        steps {
-            checkout scm
-        }
+    environment {
+        PYTHON = 'C:\\Users\\test\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe'
     }
 
-    stage('Setup') {
-        steps {
-            bat 'python --version'
-            bat 'python -m venv venv'
-            bat 'venv\\Scripts\\python.exe -m pip install --upgrade pip'
-            bat 'venv\\Scripts\\python.exe -m pip install -r requirements.txt'
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Setup') {
+            steps {
+                bat '"%PYTHON%" --version'
+                bat '"%PYTHON%" -c "import sys; print(sys.executable)"'
+                bat '"%PYTHON%" -m pip --version'
+
+                bat '"%PYTHON%" -m pip install --upgrade pip'
+
+                if (fileExists('requirements.txt')) {
+                    bat '"%PYTHON%" -m pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat '"%PYTHON%" -m pytest'
+            }
+        }
+
+        stage('Run Flask') {
+            steps {
+                bat '"%PYTHON%" app.py'
+            }
         }
     }
-
-    stage('Test') {
-        steps {
-            bat 'venv\\Scripts\\python.exe -m pytest'
-        }
-    }
-
-    stage('Run Flask') {
-        steps {
-            bat 'venv\\Scripts\\python.exe app.py'
-        }
-    }
-}
-
-
 }
