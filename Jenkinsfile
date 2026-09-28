@@ -18,12 +18,8 @@ pipeline {
                 bat '"%PYTHON%" --version'
                 bat '"%PYTHON%" -c "import sys; print(sys.executable)"'
                 bat '"%PYTHON%" -m pip --version'
-
                 bat '"%PYTHON%" -m pip install --upgrade pip'
-
-                if (fileExists('requirements.txt')) {
-                    bat '"%PYTHON%" -m pip install -r requirements.txt'
-                }
+                bat '"%PYTHON%" -m pip install -r requirements.txt'
             }
         }
 
